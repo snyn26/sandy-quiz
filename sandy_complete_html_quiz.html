@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandy Quiz - Interactive</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f8fafc, #f1f5f9, #e2e8f0); min-height: 100vh; }
+        
+        .setup-container { max-width: 800px; margin: 2rem auto; padding: 2rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 20px; border: 1px solid #bae6fd; }
+        .setup-title { color: #0ea5e9; font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center; }
+        .setup-steps { color: #0c4a6e; line-height: 1.8; }
+        .setup-steps h4 { color: #0369a1; margin: 1.5rem 0 0.5rem 0; }
+        .start-btn { background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); transition: all 0.3s ease; font-weight: 600; margin: 10px; }
+        
+        .presentation-container { width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; }
+        .presentation-container.active { display: flex; }
+        .slide-content { background: linear-gradient(135deg, #fefcff, #fef7ff, #fdf2f8); border-radius: 20px; padding: 3rem; max-width: 900px; width: 100%; box-shadow: 0 15px 40px rgba(139, 92, 246, 0.12); border: 1px solid #e0e7ff; }
+        .slide-title { font-size: 3rem; color: #6b46c1; margin-bottom: 2rem; font-weight: 600; background: linear-gradient(135deg, #6b46c1, #8b5cf6, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .question-title { font-size: 2.2rem; color: #5b21b6; margin-bottom: 2rem; font-weight: 600; }
+        .options { text-align: left; max-width: 700px; margin: 0 auto; }
+        .options p { font-size: 1.4rem; color: #4c1d95; background: rgba(233, 213, 255, 0.4); padding: 18px 25px; margin: 15px 0; border-radius: 15px; border-left: 5px solid #a78bfa; }
+        .answer-slide .slide-content { background: linear-gradient(135deg, #f0f9ff, #e0f2fe, #f0f4ff); }
+        .answer-text { font-size: 2.5rem; color: #1e40af; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1e40af, #3b82f6, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .qr-container { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; margin-top: 2rem; }
+        .qr-display { width: 280px; height: 280px; background: white; border: 3px solid #6b46c1; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 15px 30px rgba(107, 70, 193, 0.15); }
+        .qr-text { font-size: 1.2rem; color: #6b46c1; font-weight: 500; max-width: 500px; line-height: 1.6; }
+        
+        .nav-controls { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 12px; z-index: 1000; }
+        .nav-btn { background: linear-gradient(135deg, #6b46c1, #8b5cf6); color: white; border: none; padding: 15px 25px; border-radius: 25px; font-size: 0.95rem; cursor: pointer; box-shadow: 0 6px 20px rgba(107, 70, 193, 0.3); transition: all 0.3s ease; font-weight: 600; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .slide-counter { position: fixed; top: 30px; left: 30px; background: linear-gradient(135deg, rgba(255, 251, 254, 0.95), rgba(240, 237, 254, 0.95)); padding: 10px 20px; border-radius: 25px; font-weight: 600; color: #5b21b6; z-index: 1000; font-size: 1rem; border: 1px solid #c4b5fd; }
+        
+        .mobile-container { max-width: 420px; margin: 0 auto; padding: 1rem; min-height: 100vh; display: none; }
+        .mobile-container.active { display: block; }
+        .mobile-header { background: linear-gradient(135deg, #6b46c1, #8b5cf6, #a78bfa); color: white; padding: 2rem; border-radius: 20px 20px 0 0; text-align: center; }
+        .mobile-content { background: linear-gradient(135deg, rgba(253, 242, 248, 0.95), rgba(255, 251, 254, 0.95)); padding: 2rem; border-radius: 0 0 20px 20px; box-shadow: 0 10px 30px rgba(107, 70, 193, 0.2); min-height: 300px; }
+        .mobile-input { width: 100%; padding: 15px; border: 2px solid #c4b5fd; border-radius: 15px; font-size: 1.1rem; margin-bottom: 1.5rem; text-align: center; background: rgba(255, 251, 254, 0.8); }
+        .mobile-btn { width: 100%; background: linear-gradient(135deg, #6b46c1, #8b5cf6); color: white; border: none; padding: 15px; border-radius: 15px; font-size: 1.1rem; cursor: pointer; margin: 0.5rem 0; transition: all 0.3s ease; font-weight: 600; box-shadow: 0 4px 15px rgba(107, 70, 193, 0.25); }
+        .mobile-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+        .result-container { text-align: center; padding: 2rem 0; }
+        .result-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .result-text { font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; }
+        .correct-answer { background: rgba(233, 213, 255, 0.4); padding: 15px; border-radius: 15px; margin: 1rem 0; border-left: 5px solid #a78bfa; }
+    </style>
+</head>
+<body>
+    <div id="setup-view">
+        <div class="setup-container">
+            <h2 class="setup-title">🎯 Who Wants to be a Sandy-onaire?</h2>
+            <div class="setup-steps">
+                <p><strong>Interactive quiz system - works independently!</strong></p>
+                <h4>📱 For Mobile Participants:</h4>
+                <p>Team members add <code>?mobile=true</code> to your quiz URL to join on their phones.</p>
+                <h4>🖥️ For Presenter:</h4>
+                <p>Use the main interface to navigate slides and control the presentation.</p>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <button class="start-btn" onclick="startPresentation()">🎬 Start Interactive Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="presentation-mode" style="display: none;">
+        <div class="slide-counter"><span id="slide-counter">Slide 1 of 11</span></div>
+        <div class="nav-controls">
+            <button class="nav-btn" onclick="previousSlide()" id="prevBtn" disabled>Previous</button>
+            <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next</button>
+            <button class="nav-btn" onclick="goToSetup()">Exit</button>
+        </div>
+
+        <div class="presentation-container active" id="slide1">
+            <div class="slide-content">
+                <h1 class="slide-title">Who Wants to be a Sandy-onaire?</h1>
+                <div class="qr-container">
+                    <div class="qr-display">
+                        <div style="color: #6b46c1; text-align: center; padding: 20px;">
+                            <div style="font-size: 2rem; margin-bottom: 15px;">📱</div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 10px;">Mobile Quiz</div>
+                            <div style="font-size: 0.9rem; line-height: 1.4; margin-bottom: 15px;">Add ?mobile=true to URL</div>
+                        </div>
+                    </div>
+                    <p class="qr-text">📱 Scan QR code to join!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="presentation-container" id="slide2">
+            <div class="slide-content">
+                <h2 class="question-title">Question 1: How many siblings do I have?</h2>
+                <div class="options"><p>A. 1</p><p>B. 2</p><p>C. 3</p><p>D. 4</p></div>
+            </div>
+        </div>
+
+        <div class="presentation-container answer-slide" id="slide3">
+            <div class="slide-content">
+                <div class="answer-text">Answer: D - 4</div>
+            </div>
+        </div>
+
+        <div class="presentation-container" id="slide4">
+            <div class="slide-content">
+                <h2 class="question-title">Question 2: What's my go-to office toast?</h2>
+                <div class="options"><p>A. Raisin toast with butter</p><p>B. Peanut butter toast</p><p>C. Vegemite toast</p><p>D. No toast for me!</p></div>
+            </div>
+        </div>
+
+        <div class="presentation-container answer-slide" id="slide5">
+            <div class="slide-content">
+                <div class="answer-text">Answer: B - Peanut butter toast</div>
+            </div>
+        </div>
+
+        <div class="presentation-container" id="slide6">
+            <div class="slide-content">
+                <h2 class="question-title">Question 3: What was my first part-time job?</h2>
+                <div class="options"><p>A. Waitressing at a BBQ restaurant</p><p>B. Making and selling popcorn</p><p>C. Pushing people down the slide at Wet'n'Wild</p><p>D. Selling jewellery</p><p>E. Selling couches/desks at IKEA</p></div>
+            </div>
+        </div>
+
+        <div class="presentation-container answer-slide" id="slide7">
+            <div class="slide-content">
+                <div class="answer-text">Answer: B - Making and selling popcorn</div>
+            </div>
+        </div>
+
+        <div class="presentation-container" id="slide8">
+            <div class="slide-content">
+                <h2 class="question-title">Question 4: True or False</h2>
+                <p style="font-size: 1.6rem; color: #5b21b6; margin-bottom: 2rem;">I am more of an early bird than a night owl</p>
+                <div class="options"><p>A. True</p><p>B. False</p></div>
+            </div>
+        </div>
+
+        <div class="presentation-container answer-slide" id="slide9">
+            <div class="slide-content">
+                <div class="answer-text">Answer: B - False</div>
+            </div>
+        </div>
+
+        <div class="presentation-container" id="slide10">
+            <div class="slide-content">
+                <h2 class="question-title">Question 5: What is my most used emoji?</h2>
+                <div class="options"><p>A. 😭</p><p>B. 🤣</p><p>C. 💗</p><p>D. 🤔</p></div>
+            </div>
+        </div>
+
+        <div class="presentation-container answer-slide" id="slide11">
+            <div class="slide-content">
+                <div class="answer-text">Answer: A - 😭 (crying face)</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobile-interface" class="mobile-container">
+        <div id="join-screen">
+            <div class="mobile-header"><h2>Who Wants to be a Sandy-onaire? 🎉</h2></div>
+            <div class="mobile-content">
+                <h3>Enter your name to join!</h3>
+                <input type="text" id="player-name" class="mobile-input" placeholder="Your name">
+                <button class="mobile-btn" onclick="joinQuiz()">Join Quiz! 🚀</button>
+            </div>
+        </div>
+        <div id="waiting-screen" style="display: none;">
+            <div class="mobile-header"><h2>Welcome, <span id="welcome-name"></span>! 👋</h2></div>
+            <div class="mobile-content">
+                <h3>Waiting for the quiz to start...</h3>
+                <p>Keep an eye on the main screen! 📺</p>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <div style="font-size: 3rem;">⏳</div>
+                    <p style="margin-top: 1rem; color: #6b46c1;">Your score: <span id="current-score">0</span>/5</p>
+                </div>
+            </div>
+        </div>
+        <div id="question-screen" style="display: none;">
+            <div class="mobile-header"><h2 id="mobile-question">Question will appear here</h2></div>
+            <div class="mobile-content"><div id="mobile-options"></div></div>
+        </div>
+        <div id="result-screen" style="display: none;">
+            <div class="mobile-header"><h2>Result</h2></div>
+            <div class="mobile-content">
+                <div class="result-container">
+                    <div id="result-icon" class="result-icon"></div>
+                    <div id="result-text" class="result-text"></div>
+                    <div id="correct-answer" class="correct-answer"></div>
+                    <p style="font-size: 1.1rem; color: #6b46c1; margin-top: 1rem;">Your Score: <span id="score-display">0</span>/5</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 11;
+        let currentQuestion = 0;
+        let playerData = { name: '', score: 0, answers: [] };
+
+        const questions = [
+            { question: "How many siblings do I have?", options: ["1", "2", "3", "4"], correct: 3, answer: "D - 4" },
+            { question: "What's my go-to office toast?", options: ["Raisin toast with butter", "Peanut butter toast", "Vegemite toast", "No toast for me!"], correct: 1, answer: "B - Peanut butter toast" },
+            { question: "What was my first part-time job?", options: ["Waitressing at a BBQ restaurant", "Making and selling popcorn", "Pushing people down the slide at Wet'n'Wild", "Selling jewellery", "Selling couches/desks at IKEA"], correct: 1, answer: "B - Making and selling popcorn" },
+            { question: "True or False - I am more of an early bird than a night owl", options: ["True", "False"], correct: 1, answer: "B - False" },
+            { question: "What is my most used emoji?", options: ["😭", "🤣", "💗", "🤔"], correct: 0, answer: "A - 😭 (crying face)" }
+        ];
+
+        function initializePage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('mobile') === 'true') {
+                document.getElementById('setup-view').style.display = 'none';
+                document.getElementById('presentation-mode').style.display = 'none';
+                document.getElementById('mobile-interface').classList.add('active');
+            }
+        }
+
+        function startPresentation() {
+            document.getElementById('setup-view').style.display = 'none';
+            document.getElementById('presentation-mode').style.display = 'block';
+            updateNavigation();
+        }
+
+        function goToSetup() {
+            document.getElementById('setup-view').style.display = 'block';
+            document.getElementById('presentation-mode').style.display = 'none';
+            currentSlide = 1;
+            document.querySelectorAll('.presentation-container').forEach(slide => slide.classList.remove('active'));
+            document.getElementById('slide1').classList.add('active');
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                document.getElementById('slide' + currentSlide).classList.remove('active');
+                currentSlide++;
+                document.getElementById('slide' + currentSlide).classList.add('active');
+                if ([2, 4, 6, 8, 10].includes(currentSlide)) {
+                    const questionIndex = Math.floor((currentSlide - 2) / 2);
+                    currentQuestion = questionIndex;
+                    broadcastQuestion(questionIndex);
+                }
+                updateNavigation();
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                document.getElementById('slide' + currentSlide).classList.remove('active');
+                currentSlide--;
+                document.getElementById('slide' + currentSlide).classList.add('active');
+                updateNavigation();
+            }
+        }
+
+        function updateNavigation() {
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+            document.getElementById('slide-counter').textContent = 'Slide ' + currentSlide + ' of ' + totalSlides;
+        }
+
+        function joinQuiz() {
+            const name = document.getElementById('player-name').value.trim();
+            if (name) {
+                playerData.name = name;
+                playerData.score = 0;
+                playerData.answers = [];
+                document.getElementById('welcome-name').textContent = name;
+                document.getElementById('join-screen').style.display = 'none';
+                document.getElementById('waiting-screen').style.display = 'block';
+                updateScoreDisplay();
+            }
+        }
+
+        function broadcastQuestion(questionIndex) {
+            localStorage.setItem('currentQuestion', JSON.stringify({ index: questionIndex, question: questions[questionIndex] }));
+            if (document.getElementById('mobile-interface').classList.contains('active')) {
+                showMobileQuestion(questionIndex);
+            }
+        }
+
+        function showMobileQuestion(questionIndex) {
+            const question = questions[questionIndex];
+            document.getElementById('mobile-question').textContent = 'Question ' + (questionIndex + 1) + ': ' + question.question;
+            const optionsContainer = document.getElementById('mobile-options');
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'mobile-btn';
+                button.textContent = String.fromCharCode(65 + index) + '. ' + option;
+                button.onclick = () => submitAnswer(questionIndex, index);
+                optionsContainer.appendChild(button);
+            });
+            document.getElementById('waiting-screen').style.display = 'none';
+            document.getElementById('question-screen').style.display = 'block';
+        }
+
+        function submitAnswer(questionIndex, answerIndex) {
+            const question = questions[questionIndex];
+            const isCorrect = answerIndex === question.correct;
+            if (isCorrect) playerData.score++;
+            playerData.answers.push({ question: questionIndex, answer: answerIndex, correct: isCorrect });
+            showResult(isCorrect, question.answer);
+            const buttons = document.querySelectorAll('#mobile-options .mobile-btn');
+            buttons.forEach(btn => btn.disabled = true);
+            updateScoreDisplay();
+        }
+
+        function showResult(isCorrect, correctAnswer) {
+            const resultIcon = document.getElementById('result-icon');
+            const resultText = document.getElementById('result-text');
+            const correctAnswerDiv = document.getElementById('correct-answer');
+            const scoreDisplay = document.getElementById('score-display');
+            
+            if (isCorrect) {
+                resultIcon.textContent = '✅';
+                resultText.textContent = 'Nice! That\'s correct!';
+                resultText.style.color = '#059669';
+            } else {
+                resultIcon.textContent = '❌';
+                resultText.textContent = 'Sorry, that\'s incorrect';
+                resultText.style.color = '#dc2626';
+            }
+            
+            correctAnswerDiv.textContent = 'Correct Answer: ' + correctAnswer;
+            scoreDisplay.textContent = playerData.score + '/' + (currentQuestion + 1);
+            
+            document.getElementById('question-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('result-screen').style.display = 'none';
+                document.getElementById('waiting-screen').style.display = 'block';
+            }, 4000);
+        }
+
+        function updateScoreDisplay() {
+            const currentScoreElements = document.querySelectorAll('#current-score');
+            currentScoreElements.forEach(element => element.textContent = playerData.score);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('presentation-mode').style.display === 'block') {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault(); nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault(); previousSlide();
+                } else if (e.key === 'Escape') { goToSetup(); }
+            }
+        });
+
+        setInterval(() => {
+            if (document.getElementById('mobile-interface').classList.contains('active')) {
+                const storedQuestion = localStorage.getItem('currentQuestion');
+                if (storedQuestion && document.getElementById('waiting-screen').style.display !== 'none') {
+                    const questionData = JSON.parse(storedQuestion);
+                    showMobileQuestion(questionData.index);
+                    localStorage.removeItem('currentQuestion');
+                }
+            }
+        }, 1000);
+
+        window.onload = initializePage;
+    </script>
+</body>
+</html>
