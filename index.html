@@ -1,0 +1,380 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Sandy Quiz - Interactive&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>* { margin: 0; padding: 0; box-sizing: border-box; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #f8fafc, #f1f5f9, #e2e8f0); min-height: 100vh; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.setup-container { max-width: 800px; margin: 2rem auto; padding: 2rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 20px; border: 1px solid #bae6fd; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.setup-title { color: #0ea5e9; font-size: 1.8rem; margin-bottom: 1.5rem; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.setup-steps { color: #0c4a6e; line-height: 1.8; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.setup-steps h4 { color: #0369a1; margin: 1.5rem 0 0.5rem 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.start-btn { background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); transition: all 0.3s ease; font-weight: 600; margin: 10px; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.presentation-container { width: 100vw; height: 100vh; display: none; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.presentation-container.active { display: flex; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.slide-content { background: linear-gradient(135deg, #fefcff, #fef7ff, #fdf2f8); border-radius: 20px; padding: 3rem; max-width: 900px; width: 100%; box-shadow: 0 15px 40px rgba(139, 92, 246, 0.12); border: 1px solid #e0e7ff; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.slide-title { font-size: 3rem; color: #6b46c1; margin-bottom: 2rem; font-weight: 600; background: linear-gradient(135deg, #6b46c1, #8b5cf6, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.question-title { font-size: 2.2rem; color: #5b21b6; margin-bottom: 2rem; font-weight: 600; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.options { text-align: left; max-width: 700px; margin: 0 auto; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.options p { font-size: 1.4rem; color: #4c1d95; background: rgba(233, 213, 255, 0.4); padding: 18px 25px; margin: 15px 0; border-radius: 15px; border-left: 5px solid #a78bfa; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.answer-slide .slide-content { background: linear-gradient(135deg, #f0f9ff, #e0f2fe, #f0f4ff); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.answer-text { font-size: 2.5rem; color: #1e40af; margin-bottom: 2rem; font-weight: 700; background: linear-gradient(135deg, #1e40af, #3b82f6, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.qr-container { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; margin-top: 2rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.qr-display { width: 280px; height: 280px; background: white; border: 3px solid #6b46c1; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 15px 30px rgba(107, 70, 193, 0.15); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.qr-text { font-size: 1.2rem; color: #6b46c1; font-weight: 500; max-width: 500px; line-height: 1.6; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.nav-controls { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 12px; z-index: 1000; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.nav-btn { background: linear-gradient(135deg, #6b46c1, #8b5cf6); color: white; border: none; padding: 15px 25px; border-radius: 25px; font-size: 0.95rem; cursor: pointer; box-shadow: 0 6px 20px rgba(107, 70, 193, 0.3); transition: all 0.3s ease; font-weight: 600; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.slide-counter { position: fixed; top: 30px; left: 30px; background: linear-gradient(135deg, rgba(255, 251, 254, 0.95), rgba(240, 237, 254, 0.95)); padding: 10px 20px; border-radius: 25px; font-weight: 600; color: #5b21b6; z-index: 1000; font-size: 1rem; border: 1px solid #c4b5fd; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.mobile-container { max-width: 420px; margin: 0 auto; padding: 1rem; min-height: 100vh; display: none; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.mobile-container.active { display: block; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.mobile-header { background: linear-gradient(135deg, #6b46c1, #8b5cf6, #a78bfa); color: white; padding: 2rem; border-radius: 20px 20px 0 0; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.mobile-content { background: linear-gradient(135deg, rgba(253, 242, 248, 0.95), rgba(255, 251, 254, 0.95)); padding: 2rem; border-radius: 0 0 20px 20px; box-shadow: 0 10px 30px rgba(107, 70, 193, 0.2); min-height: 300px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.mobile-input { width: 100%; padding: 15px; border: 2px solid #c4b5fd; border-radius: 15px; font-size: 1.1rem; margin-bottom: 1.5rem; text-align: center; background: rgba(255, 251, 254, 0.8); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.mobile-btn { width: 100%; background: linear-gradient(135deg, #6b46c1, #8b5cf6); color: white; border: none; padding: 15px; border-radius: 15px; font-size: 1.1rem; cursor: pointer; margin: 0.5rem 0; transition: all 0.3s ease; font-weight: 600; box-shadow: 0 4px 15px rgba(107, 70, 193, 0.25); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.mobile-btn:disabled { background: #9ca3af; cursor: not-allowed; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-container { text-align: center; padding: 2rem 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-icon { font-size: 4rem; margin-bottom: 1rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-text { font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.correct-answer { background: rgba(233, 213, 255, 0.4); padding: 15px; border-radius: 15px; margin: 1rem 0; border-left: 5px solid #a78bfa; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="setup-view"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="setup-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="setup-title"&gt;🎯 Who Wants to be a Sandy-onaire?&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="setup-steps"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;&lt;strong&gt;Interactive quiz system - works independently!&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h4&gt;📱 For Mobile Participants:&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Team members add &lt;code&gt;?mobile=true&lt;/code&gt; to your quiz URL to join on their phones.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h4&gt;🖥️ For Presenter:&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Use the main interface to navigate slides and control the presentation.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style="text-align: center; margin: 2rem 0;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button class="start-btn" onclick="startPresentation()"&gt;🎬 Start Interactive Quiz&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="presentation-mode" style="display: none;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="slide-counter"&gt;&lt;span id="slide-counter"&gt;Slide 1 of 11&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="nav-controls"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="nav-btn" onclick="previousSlide()" id="prevBtn" disabled&gt;Previous&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="nav-btn" onclick="nextSlide()" id="nextBtn"&gt;Next&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="nav-btn" onclick="goToSetup()"&gt;Exit&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container active" id="slide1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1 class="slide-title"&gt;Who Wants to be a Sandy-onaire?&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="qr-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="qr-display"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div style="color: #6b46c1; text-align: center; padding: 20px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div style="font-size: 2rem; margin-bottom: 15px;"&gt;📱&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 10px;"&gt;Mobile Quiz&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div style="font-size: 0.9rem; line-height: 1.4; margin-bottom: 15px;"&gt;Add ?mobile=true to URL&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="qr-text"&gt;📱 Scan QR code to join!&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container" id="slide2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="question-title"&gt;Question 1: How many siblings do I have?&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="options"&gt;&lt;p&gt;A. 1&lt;/p&gt;&lt;p&gt;B. 2&lt;/p&gt;&lt;p&gt;C. 3&lt;/p&gt;&lt;p&gt;D. 4&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container answer-slide" id="slide3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="answer-text"&gt;Answer: D - 4&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container" id="slide4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="question-title"&gt;Question 2: What's my go-to office toast?&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="options"&gt;&lt;p&gt;A. Raisin toast with butter&lt;/p&gt;&lt;p&gt;B. Peanut butter toast&lt;/p&gt;&lt;p&gt;C. Vegemite toast&lt;/p&gt;&lt;p&gt;D. No toast for me!&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container answer-slide" id="slide5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="answer-text"&gt;Answer: B - Peanut butter toast&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container" id="slide6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="question-title"&gt;Question 3: What was my first part-time job?&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="options"&gt;&lt;p&gt;A. Waitressing at a BBQ restaurant&lt;/p&gt;&lt;p&gt;B. Making and selling popcorn&lt;/p&gt;&lt;p&gt;C. Pushing people down the slide at Wet'n'Wild&lt;/p&gt;&lt;p&gt;D. Selling jewellery&lt;/p&gt;&lt;p&gt;E. Selling couches/desks at IKEA&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container answer-slide" id="slide7"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="answer-text"&gt;Answer: B - Making and selling popcorn&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container" id="slide8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="question-title"&gt;Question 4: True or False&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p style="font-size: 1.6rem; color: #5b21b6; margin-bottom: 2rem;"&gt;I am more of an early bird than a night owl&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="options"&gt;&lt;p&gt;A. True&lt;/p&gt;&lt;p&gt;B. False&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container answer-slide" id="slide9"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="answer-text"&gt;Answer: B - False&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container" id="slide10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h2 class="question-title"&gt;Question 5: What is my most used emoji?&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="options"&gt;&lt;p&gt;A. 😭&lt;/p&gt;&lt;p&gt;B. 🤣&lt;/p&gt;&lt;p&gt;C. 💗&lt;/p&gt;&lt;p&gt;D. 🤔&lt;/p&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="presentation-container answer-slide" id="slide11"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="slide-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="answer-text"&gt;Answer: A - 😭 (crying face)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="mobile-interface" class="mobile-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="join-screen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mobile-header"&gt;&lt;h2&gt;Who Wants to be a Sandy-onaire? 🎉&lt;/h2&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mobile-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3&gt;Enter your name to join!&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" id="player-name" class="mobile-input" placeholder="Your name"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="mobile-btn" onclick="joinQuiz()"&gt;Join Quiz! 🚀&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="waiting-screen" style="display: none;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mobile-header"&gt;&lt;h2&gt;Welcome, &lt;span id="welcome-name"&gt;&lt;/span&gt;! 👋&lt;/h2&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mobile-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3&gt;Waiting for the quiz to start...&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Keep an eye on the main screen! 📺&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style="text-align: center; margin-top: 2rem;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="font-size: 3rem;"&gt;⏳&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p style="margin-top: 1rem; color: #6b46c1;"&gt;Your score: &lt;span id="current-score"&gt;0&lt;/span&gt;/5&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="question-screen" style="display: none;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mobile-header"&gt;&lt;h2 id="mobile-question"&gt;Question will appear here&lt;/h2&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mobile-content"&gt;&lt;div id="mobile-options"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="result-screen" style="display: none;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mobile-header"&gt;&lt;h2&gt;Result&lt;/h2&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mobile-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="result-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="result-icon" class="result-icon"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="result-text" class="result-text"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="correct-answer" class="correct-answer"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p style="font-size: 1.1rem; color: #6b46c1; margin-top: 1rem;"&gt;Your Score: &lt;span id="score-display"&gt;0&lt;/span&gt;/5&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let currentSlide = 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const totalSlides = 11;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let currentQuestion = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let playerData = { name: '', score: 0, answers: [] };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const questions = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ question: "How many siblings do I have?", options: ["1", "2", "3", "4"], correct: 3, answer: "D - 4" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ question: "What's my go-to office toast?", options: ["Raisin toast with butter", "Peanut butter toast", "Vegemite toast", "No toast for me!"], correct: 1, answer: "B - Peanut butter toast" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ question: "What was my first part-time job?", options: ["Waitressing at a BBQ restaurant", "Making and selling popcorn", "Pushing people down the slide at Wet'n'Wild", "Selling jewellery", "Selling couches/desks at IKEA"], correct: 1, answer: "B - Making and selling popcorn" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ question: "True or False - I am more of an early bird than a night owl", options: ["True", "False"], correct: 1, answer: "B - False" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ question: "What is my most used emoji?", options: ["😭", "🤣", "💗", "🤔"], correct: 0, answer: "A - 😭 (crying face)" }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function initializePage() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const urlParams = new URLSearchParams(window.location.search);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (urlParams.get('mobile') === 'true') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('setup-view').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('presentation-mode').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('mobile-interface').classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startPresentation() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('setup-view').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('presentation-mode').style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateNavigation();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function goToSetup() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('setup-view').style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('presentation-mode').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentSlide = 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.presentation-container').forEach(slide =&gt; slide.classList.remove('active'));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('slide1').classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function nextSlide() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (currentSlide &lt; totalSlides) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('slide' + currentSlide).classList.remove('active');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>currentSlide++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('slide' + currentSlide).classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if ([2, 4, 6, 8, 10].includes(currentSlide)) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const questionIndex = Math.floor((currentSlide - 2) / 2);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>currentQuestion = questionIndex;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>broadcastQuestion(questionIndex);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>updateNavigation();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function previousSlide() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (currentSlide &gt; 1) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('slide' + currentSlide).classList.remove('active');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>currentSlide--;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('slide' + currentSlide).classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>updateNavigation();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateNavigation() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('prevBtn').disabled = currentSlide === 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('nextBtn').disabled = currentSlide === totalSlides;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('slide-counter').textContent = 'Slide ' + currentSlide + ' of ' + totalSlides;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function joinQuiz() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const name = document.getElementById('player-name').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (name) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>playerData.name = name;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>playerData.score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>playerData.answers = [];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('welcome-name').textContent = name;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('join-screen').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('waiting-screen').style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>updateScoreDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function broadcastQuestion(questionIndex) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>localStorage.setItem('currentQuestion', JSON.stringify({ index: questionIndex, question: questions[questionIndex] }));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (document.getElementById('mobile-interface').classList.contains('active')) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showMobileQuestion(questionIndex);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showMobileQuestion(questionIndex) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const question = questions[questionIndex];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('mobile-question').textContent = 'Question ' + (questionIndex + 1) + ': ' + question.question;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const optionsContainer = document.getElementById('mobile-options');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>optionsContainer.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>question.options.forEach((option, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const button = document.createElement('button');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>button.className = 'mobile-btn';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>button.textContent = String.fromCharCode(65 + index) + '. ' + option;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>button.onclick = () =&gt; submitAnswer(questionIndex, index);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionsContainer.appendChild(button);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('waiting-screen').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('question-screen').style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function submitAnswer(questionIndex, answerIndex) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const question = questions[questionIndex];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const isCorrect = answerIndex === question.correct;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isCorrect) playerData.score++;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>playerData.answers.push({ question: questionIndex, answer: answerIndex, correct: isCorrect });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showResult(isCorrect, question.answer);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const buttons = document.querySelectorAll('#mobile-options .mobile-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>buttons.forEach(btn =&gt; btn.disabled = true);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateScoreDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showResult(isCorrect, correctAnswer) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const resultIcon = document.getElementById('result-icon');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const resultText = document.getElementById('result-text');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const correctAnswerDiv = document.getElementById('correct-answer');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const scoreDisplay = document.getElementById('score-display');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isCorrect) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>resultIcon.textContent = '✅';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>resultText.textContent = 'Nice! That\'s correct!';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>resultText.style.color = '#059669';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>resultIcon.textContent = '❌';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>resultText.textContent = 'Sorry, that\'s incorrect';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>resultText.style.color = '#dc2626';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>correctAnswerDiv.textContent = 'Correct Answer: ' + correctAnswer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>scoreDisplay.textContent = playerData.score + '/' + (currentQuestion + 1);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('question-screen').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('result-screen').style.display = 'block';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('result-screen').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('waiting-screen').style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 4000);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateScoreDisplay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const currentScoreElements = document.querySelectorAll('#current-score');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentScoreElements.forEach(element =&gt; element.textContent = playerData.score);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.addEventListener('keydown', function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (document.getElementById('presentation-mode').style.display === 'block') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (e.key === 'ArrowRight' || e.key === ' ') {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>e.preventDefault(); nextSlide();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else if (e.key === 'ArrowLeft') {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>e.preventDefault(); previousSlide();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else if (e.key === 'Escape') { goToSetup(); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (document.getElementById('mobile-interface').classList.contains('active')) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const storedQuestion = localStorage.getItem('currentQuestion');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (storedQuestion &amp;&amp; document.getElementById('waiting-screen').style.display !== 'none') {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const questionData = JSON.parse(storedQuestion);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showMobileQuestion(questionData.index);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>localStorage.removeItem('currentQuestion');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}, 1000);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.onload = initializePage;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
